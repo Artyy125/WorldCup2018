@@ -3,14 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WorldCup2018.EFModel;
+using WorldCup2018.Models;
 
 namespace WorldCup2018.Controllers
 {
     public class HomeController : Controller
     {
+        private WorldcupDbContext _db;
+        public HomeController()
+        {
+            _db = new WorldcupDbContext();
+        }
         public ActionResult Index()
         {
-            return View();
+            List<Teams> teams = _db.Matches.Where(r => r.MatchDateTime > DateTime.Now).Select(r => new Teams
+            {
+                Team1 = r.Team1,
+                Team2 = r.Team2,
+                Team1LogoUrl = r.Team1FlagUrl,
+                Team2LogoUrl = r.Team2FlagUrl
+            }).ToList();
+            GetData data = new GetData();
+            data.Teams = teams;
+            return View(data);
         }
 
         public ActionResult About()

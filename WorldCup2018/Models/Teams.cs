@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WorldCup2018.Models
+{
+    public class Teams
+    {
+        public string Team1 { get; set; }
+        public string Team2 { get; set; }
+        public string Team1LogoUrl { get; set; }
+        public string Team2LogoUrl { get; set; }
+        public int Team1Score { get; set; }
+        public int Team2Score { get; set; }
+        public int Team1PenaltyScore { get; set; }
+        public int Team2PenaltyScore { get; set; }
+    }
+}
