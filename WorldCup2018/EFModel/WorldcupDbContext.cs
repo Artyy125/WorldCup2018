@@ -11,6 +11,7 @@ namespace WorldCup2018.EFModel
     {
         public WorldcupDbContext() : base("DbContext") { }
         public DbSet<Match> Matches { get; set; }
+        public DbSet<UserInput> UserInputs { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
