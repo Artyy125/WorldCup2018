@@ -7,6 +7,7 @@ namespace WorldCup2018.Models
 {
     public class Teams
     {
+        public int Id { get; set; }
         public string Team1 { get; set; }
         public string Team2 { get; set; }
         public string Team1LogoUrl { get; set; }

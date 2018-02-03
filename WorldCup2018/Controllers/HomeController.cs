@@ -22,13 +22,31 @@ namespace WorldCup2018.Controllers
                 Team1 = r.Team1,
                 Team2 = r.Team2,
                 Team1LogoUrl = r.Team1FlagUrl,
-                Team2LogoUrl = r.Team2FlagUrl
+                Team2LogoUrl = r.Team2FlagUrl,
+                Id=r.Id
             }).ToList();
             GetData data = new GetData();
             data.Teams = teams;
             return View(data);
         }
+        [HttpPost]
+        public ActionResult Index(FormCollection results)
+        {
+            try
+            {
+                string userName = User.Identity.Name;
+                foreach (var item in results)
+                {
+                    string t = results[item.ToString()].ToString();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

@@ -7,7 +7,7 @@
     <h1>World Cup 2018 Russia</h1>
 </div>
     <div class="text-center">
-        <form>
+        <form action="~/Home/Index" method="post">
             <fieldset>
                 @foreach (var item in Model.Teams)
                 {
@@ -17,10 +17,10 @@
                                 <tr>
                                     <td>
                                         <img src="@item.Team1LogoUrl" />
-                                        <label style="width:90px;text-align:left">@item.Team1</label>
+                                        <label name="@item.Id" id="@item.Id" style="width:90px;text-align:left">@item.Team1</label>
                                     </td>
                                     <td>
-                                        <input type="text" maxlength="2" size="4" />
+                                        <input type="text" id="@item.Team1" name="@item.Id" maxlength="2" size="4" />
                                     </td>
                                 </tr>
                             </table>
@@ -36,7 +36,7 @@
                                         <label style="width:90px;text-align:left">@item.Team2</label>
                                     </td>
                                     <td>
-                                        <input type="text" maxlength="2" size="4" />
+                                        <input type="text" id="@item.Team2" name="@item.Id" maxlength="2" size="4" />
                                     </td>
                                 </tr>
                             </table>
