@@ -1,0 +1,48 @@
+﻿@model WorldCup2018.Models.GetData
+@{
+    ViewBag.Title = "Final Results";
+}
+
+<div class="jumbotron">
+    <h3>World Cup 2018 Russia - Final Results</h3>
+</div>
+<div class="text-center">
+    <form action="~/Home/Index" method="post">
+        <fieldset>
+            @foreach (var item in Model.Teams)
+            {
+                <div class="row form-group">
+                    <div class="col-md-5">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="@item.Team1LogoUrl" />
+                                    <label name="@item.Id" id="@item.Id" style="width:90px;text-align:left">@item.Team1</label>
+                                </td>
+                                <td>
+                                    <label>@item.Team1Score</label>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+                    <div class="col-md-5 text-left">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="@item.Team2LogoUrl" />
+                                    <label style="width:90px;text-align:left">@item.Team2</label>
+                                </td>
+                                <td>
+                                    <label>@item.Team2Score</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }
+        </fieldset>
+    </form>
+</div>

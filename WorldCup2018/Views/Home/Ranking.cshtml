@@ -1,0 +1,70 @@
+﻿@model List<WorldCup2018.Models.Ranking>
+@{
+    ViewBag.Title = "Ranking";
+}
+<br />
+<label style="color:mediumvioletred;font-size:larger">Ranking</label>
+<br />
+<div class="row">
+    <div class="col-xs-1">
+        Rank
+    </div>
+    <div class="col-xs-2">
+        First Name
+    </div>
+    <div class="col-xs-2">
+        Last Name
+    </div>
+    <div class="col-xs-1">
+        7 Points
+    </div>
+    <div class="col-xs-1">
+        5 Points
+    </div>
+    <div class="col-xs-1">
+        3 Points
+    </div>
+    <div class="col-xs-1">
+        1 Point
+    </div>
+    <div class="col-xs-1">
+        Penalty Bonus
+    </div>
+    <div class="col-xs-1">
+        Total Points
+    </div>
+</div>
+@{int counter = 0; }
+@foreach (var item in Model)
+{
+    counter++;
+<div class="row">
+    <div class="col-xs-1">
+        <label>@counter</label> 
+    </div>
+    <div class="col-xs-2">
+        @item.FirstName
+    </div>
+    <div class="col-xs-2">
+        @item.LastName
+    </div>
+    <div class="col-xs-1">
+        @item.SevenPoints
+    </div>
+    <div class="col-xs-1">
+        @item.FivePoints
+    </div>
+    <div class="col-xs-1">
+        @item.ThreePoints
+    </div>
+    <div class="col-xs-1">
+        @item.OnePoints
+    </div>
+    <div class="col-xs-1">
+        @item.Win
+    </div>
+    <div class="col-xs-1">
+        @item.Score
+    </div>
+</div>
+}

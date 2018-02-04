@@ -81,31 +81,40 @@ namespace WorldCup2018.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var user = await UserManager.FindAsync(model.Email, model.Password);
-            if (user.EmailConfirmed == true)
+            if (user != null)
             {
-                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-
-                switch (result)
+                if (user.EmailConfirmed == true)
                 {
+                    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
 
-                    case SignInStatus.Success:
-                        return RedirectToLocal(returnUrl);
-                    case SignInStatus.LockedOut:
-                        return View("Lockout");
-                    case SignInStatus.RequiresVerification:
-                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                        return View(model);
-                    case SignInStatus.Failure:
-                    default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                    switch (result)
+                    {
+
+                        case SignInStatus.Success:
+                            return RedirectToLocal(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.RequiresVerification:
+                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                            return View(model);
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Confirm Email Address.");
+                    return View(model);
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Confirm Email Address.");
+                ModelState.AddModelError("", "User name or password is incorrect!");
                 return View(model);
             }
+            
         }
 
         //

@@ -12,9 +12,11 @@ namespace WorldCup2018.Controllers
     public class HomeController : Controller
     {
         private WorldcupDbContext _db;
+        private ApplicationDbContext _appDb;
         public HomeController()
         {
             _db = new WorldcupDbContext();
+            _appDb = new ApplicationDbContext();
         }
         public ActionResult Index()
         {
@@ -94,18 +96,76 @@ namespace WorldCup2018.Controllers
             
             return data;
         }
-        public ActionResult About()
+        public ActionResult Ranking()
         {
-            ViewBag.Message = "Your application description page.";
+            string userName = User.Identity.Name;
+            List<Teams> teams = _db.Matches.Where(r => r.MatchDateTime > DateTime.Now).Select(r => new Teams
+            {
+                Team1 = r.Team1,
+                Team2 = r.Team2,
+                Team1LogoUrl = r.Team1FlagUrl,
+                Team2LogoUrl = r.Team2FlagUrl,
+                Team1Score = r.Team1Score.Value,
+                Team2Score = r.Team2Score.Value,
+                Winner = r.Winner,
+                Id = r.Id
+            }).ToList();
+            List<string> AllUsers = _db.UserInputs.Select(r => r.UserName).Distinct().ToList();
+            List<Ranking> rankingList = new List<Ranking>();
+            foreach (var user in AllUsers)
+            {
+                var results = _db.UserInputs.Where(r => r.UserName == user).ToList();
+                Ranking rank = new Ranking();
+                foreach (var result in results)
+                {
+                    var RealResult = teams.Where(r => r.Id == result.MatchId).FirstOrDefault();
+                    if (RealResult != null)
+                    {
+                        if (RealResult.Team1Score != null && RealResult.Team2Score != null)
+                        {
+                            if (RealResult.Team1Score == result.Team1Score && RealResult.Team2Score == result.Team2Score)
+                            {
+                                rank.SevenPoints += 1;
+                                rank.Score += 7;
+                            }
+                            else if (RealResult.Team1Score - RealResult.Team2Score == result.Team1Score - result.Team2Score)
+                            {
+                                rank.FivePoints += 1;
+                                rank.Score += 5;
+                            }
+                            else if ((RealResult.Team1Score > RealResult.Team2Score && result.Team1Score > result.Team2Score) || (RealResult.Team1Score < RealResult.Team2Score && result.Team1Score < result.Team2Score))
+                            {
+                                if (RealResult. Team1Score == result.Team1Score || RealResult.Team2Score == result.Team2Score)
+                                {
+                                    rank.ThreePoints += 3;
+                                    rank.Score += 3;
+                                }
+                                else
+                                {
+                                    rank.ThreePoints += 1;
+                                    rank.Score += 1;
+                                }
+                            }
+                            else
+                            {
 
-            return View();
+                            }
+
+                        }
+                    }
+                }
+                var userInfo = _appDb.Users.Where(r => r.UserName == user).FirstOrDefault();
+                rank.FirstName = userInfo.FirstName;
+                rank.LastName = userInfo.LastName;
+                rankingList.Add(rank);
+            }
+            return View(rankingList);
         }
 
-        public ActionResult Contact()
+        public ActionResult Results()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            GetData data = GetTeamData();
+            return View(data);
         }
     }
 }

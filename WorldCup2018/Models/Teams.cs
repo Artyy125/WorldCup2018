@@ -14,7 +14,6 @@ namespace WorldCup2018.Models
         public string Team2LogoUrl { get; set; }
         public int? Team1Score { get; set; }
         public int? Team2Score { get; set; }
-        public int Team1PenaltyScore { get; set; }
-        public int Team2PenaltyScore { get; set; }
+        public string Winner { get; set; }
     }
 }
