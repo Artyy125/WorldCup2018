@@ -181,10 +181,11 @@ namespace WorldCup2018.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     var apiKey = "SG.XshB2zRZRGuKqsh9kZEHVA.twOW9eBRHg8q249sZugXYzr23kothmMX9ytmG8V8y3o";
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var client = new SendGridClient(apiKey);
                     string body = string.Format("Dear {0}< BR /> Thank you for your registration, please click on the below link to complete your registration: < a href =\"{1}\" title =\"User Email Confirm\">{1}</a>",
                         user.UserName, Url.Action("ConfirmEmail", "Account",
-                        new { Token = user.Id, userId = user.Email }, Request.Url.Scheme));
+                        new { Token = code, userId = user.Id }, Request.Url.Scheme));
                     var msg = new SendGridMessage()
                     {
                         From = new EmailAddress("alirezat@xello.world", "Alireza"),
