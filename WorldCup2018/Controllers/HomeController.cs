@@ -76,6 +76,7 @@ namespace WorldCup2018.Controllers
                 Team2LogoUrl = r.Team2FlagUrl,
                 Team1Score = r.Team1Score.Value,
                 Team2Score = r.Team2Score.Value,
+                MatchDate = r.MatchDateTime,
                 Id = r.Id
             }).ToList();
             GetData data = new GetData();
