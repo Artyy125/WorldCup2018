@@ -15,5 +15,6 @@ namespace WorldCup2018.Models
         public int? Team1Score { get; set; }
         public int? Team2Score { get; set; }
         public string Winner { get; set; }
+        public DateTime MatchDate { get; set; }
     }
 }
