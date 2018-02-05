@@ -14,6 +14,7 @@ using WorldCup2018.Models;
 using System.Net.Http;
 using System.Net.Mail;
 using SendGrid;
+using System.Configuration;
 
 namespace WorldCup2018.Controllers
 {
@@ -189,7 +190,7 @@ namespace WorldCup2018.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    var apiKey = "SG.XshB2zRZRGuKqsh9kZEHVA.twOW9eBRHg8q249sZugXYzr23kothmMX9ytmG8V8y3o";
+                    var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var client = new SendGridClient(apiKey);
                     string body = string.Format("Dear {0}< BR /> Thank you for your registration, please click on the below link to complete your registration: < a href =\"{1}\" title =\"User Email Confirm\">{1}</a>",
