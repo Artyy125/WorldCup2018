@@ -65,7 +65,7 @@ namespace WorldCup2018.Controllers
                 throw;
             }
         }
-        private GetData GetTeamData()
+        private GetData GetTeamData(bool isResult=false)
         {
             string userName = User.Identity.Name;
             List<Teams> teams = _db.Matches.Where(r => r.MatchDateTime > DateTime.Now).Select(r => new Teams
@@ -81,19 +81,23 @@ namespace WorldCup2018.Controllers
             }).ToList();
             GetData data = new GetData();
             data.Teams = teams;
-            var result = _db.UserInputs.Where(r => r.UserName == userName).ToList();
-            if (result?.Count() > 0)
+            if (isResult== false)
             {
-                data.Teams.ForEach(sc =>
+                var result = _db.UserInputs.Where(r => r.UserName == userName).ToList();
+                if (result?.Count() > 0)
                 {
-                    var oc = result.FirstOrDefault(obj => obj.MatchId == sc.Id);
-                    if (oc != null)
+                    data.Teams.ForEach(sc =>
                     {
-                        sc.Team1Score = oc.Team1Score;
-                        sc.Team2Score = oc.Team2Score;
-                    }
-                });
+                        var oc = result.FirstOrDefault(obj => obj.MatchId == sc.Id);
+                        if (oc != null)
+                        {
+                            sc.Team1Score = oc.Team1Score;
+                            sc.Team2Score = oc.Team2Score;
+                        }
+                    });
+                }
             }
+            
             
             return data;
         }
@@ -159,13 +163,14 @@ namespace WorldCup2018.Controllers
                 rank.FirstName = userInfo.FirstName;
                 rank.LastName = userInfo.LastName;
                 rankingList.Add(rank);
+                rankingList = rankingList.OrderByDescending(r => r.Score).ToList();
             }
             return View(rankingList);
         }
 
         public ActionResult Results()
         {
-            GetData data = GetTeamData();
+            GetData data = GetTeamData(true);
             return View(data);
         }
     }
