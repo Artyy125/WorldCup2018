@@ -283,6 +283,10 @@
     <Compile Include="Migrations\Identity\201802032157564_identity3.Designer.cs">
       <DependentUpon>201802032157564_identity3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Identity\201806070257287_addPassword.cs" />
+    <Compile Include="Migrations\Identity\201806070257287_addPassword.Designer.cs">
+      <DependentUpon>201806070257287_addPassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Identity\ConfigurationIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GetData.cs" />
@@ -390,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201802032157564_identity3.resx">
       <DependentUpon>201802032157564_identity3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201806070257287_addPassword.resx">
+      <DependentUpon>201806070257287_addPassword.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
