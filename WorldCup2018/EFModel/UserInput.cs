@@ -15,5 +15,6 @@ namespace WorldCup2018.EFModel
         public int? Team1Score { get; set; }
         public int? Team2Score { get; set; }
         public string Winner { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }

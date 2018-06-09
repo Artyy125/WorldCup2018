@@ -41,6 +41,7 @@ namespace WorldCup2018.Controllers
                         ur.MatchId = Int32.Parse(item.ToString());
                         ur.Team1Score = Int32.Parse(t[0].ToString());
                         ur.Team2Score = Int32.Parse(t[1].ToString());
+                        ur.DateTime = DateTime.Now;
                         int matchId = Int32.Parse(item.ToString());
                         var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
                         if (insertedData == null)
@@ -51,6 +52,7 @@ namespace WorldCup2018.Controllers
                         {
                             insertedData.Team1Score = Int32.Parse(t[0].ToString());
                             insertedData.Team2Score = Int32.Parse(t[1].ToString());
+                            insertedData.DateTime = DateTime.Now;
                         }
                     }   
                 }

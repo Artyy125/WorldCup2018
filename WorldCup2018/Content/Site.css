@@ -25,3 +25,12 @@ textarea {
 .navbar-custom{
     background-color:Highlight;
 }
+navbar-toggle .icon-bar {
+    background-color:white;
+}
+.navbar-toggle {
+    background-color:mediumaquamarine;
+}
+.icon-bar{
+    background-color:white;
+}

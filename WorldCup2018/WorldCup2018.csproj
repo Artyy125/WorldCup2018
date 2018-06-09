@@ -270,6 +270,10 @@
     <Compile Include="Migrations\201802031918461_updateData.Designer.cs">
       <DependentUpon>201802031918461_updateData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806092001503_Dateadded.cs" />
+    <Compile Include="Migrations\201806092001503_Dateadded.Designer.cs">
+      <DependentUpon>201806092001503_Dateadded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201802032006056_identity.cs" />
     <Compile Include="Migrations\Identity\201802032006056_identity.Designer.cs">
@@ -385,6 +389,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802031918461_updateData.resx">
       <DependentUpon>201802031918461_updateData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806092001503_Dateadded.resx">
+      <DependentUpon>201806092001503_Dateadded.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201802032006056_identity.resx">
       <DependentUpon>201802032006056_identity.cs</DependentUpon>
