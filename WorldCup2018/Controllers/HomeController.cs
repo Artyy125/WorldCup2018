@@ -34,31 +34,38 @@ namespace WorldCup2018.Controllers
                 foreach (var item in results)
                 {
                     string[] t = results[item.ToString()].ToString().Split(',');
-                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]))
+                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]) && Convert.ToDateTime(t[2]) < DateTime.Now)
                     {
-                        UserInput ur = new UserInput();
-                        ur.UserName = userName;
-                        ur.MatchId = Int32.Parse(item.ToString());
-                        ur.Team1Score = Int32.Parse(t[0].ToString());
-                        ur.Team2Score = Int32.Parse(t[1].ToString());
-                        ur.DateTime = DateTime.Now;
-                        int matchId = Int32.Parse(item.ToString());
-                        var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
-                        if (insertedData == null)
+                        TempData["InsertedResult"] = "You are not allowed to update a match result after it has already been started!";
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]))
                         {
-                            _db.UserInputs.Add(ur);
+                            UserInput ur = new UserInput();
+                            ur.UserName = userName;
+                            ur.MatchId = Int32.Parse(item.ToString());
+                            ur.Team1Score = Int32.Parse(t[0].ToString());
+                            ur.Team2Score = Int32.Parse(t[1].ToString());
+                            ur.DateTime = DateTime.Now;
+                            int matchId = Int32.Parse(item.ToString());
+                            var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
+                            if (insertedData == null)
+                            {
+                                _db.UserInputs.Add(ur);
+                            }
+                            else
+                            {
+                                insertedData.Team1Score = Int32.Parse(t[0].ToString());
+                                insertedData.Team2Score = Int32.Parse(t[1].ToString());
+                                insertedData.DateTime = DateTime.Now;
+                            }
+                            _db.SaveChanges();
+                            TempData["InsertedResult"] = "Your data is updated!";
                         }
-                        else
-                        {
-                            insertedData.Team1Score = Int32.Parse(t[0].ToString());
-                            insertedData.Team2Score = Int32.Parse(t[1].ToString());
-                            insertedData.DateTime = DateTime.Now;
-                        }
-                    }   
+                    }
                 }
-                _db.SaveChanges();
                 GetData data = GetTeamData();
-                TempData["InsertedResult"] = "Your data is updated!";
                 return View(data);
             }
             catch (Exception ex)
@@ -70,7 +77,7 @@ namespace WorldCup2018.Controllers
         private GetData GetTeamData(bool isResult=false)
         {
             string userName = User.Identity.Name;
-            List<Teams> teams = _db.Matches.Where(r => r.MatchDateTime > DateTime.Now).Select(r => new Teams
+            List<Teams> teams = _db.Matches.Select(r => new Teams
             {
                 Team1 = r.Team1,
                 Team2 = r.Team2,
@@ -144,7 +151,7 @@ namespace WorldCup2018.Controllers
                             {
                                 if (RealResult. Team1Score == result.Team1Score || RealResult.Team2Score == result.Team2Score)
                                 {
-                                    rank.ThreePoints += 3;
+                                    rank.ThreePoints += 1;
                                     rank.Score += 3;
                                 }
                                 else
