@@ -149,14 +149,14 @@ namespace WorldCup2018.Controllers
                             }
                             else if ((RealResult.Team1Score > RealResult.Team2Score && result.Team1Score > result.Team2Score) || (RealResult.Team1Score < RealResult.Team2Score && result.Team1Score < result.Team2Score))
                             {
-                                if (RealResult. Team1Score == result.Team1Score || RealResult.Team2Score == result.Team2Score)
+                                if (RealResult.Team1Score == result.Team1Score || RealResult.Team2Score == result.Team2Score)
                                 {
                                     rank.ThreePoints += 1;
                                     rank.Score += 3;
                                 }
                                 else
                                 {
-                                    rank.ThreePoints += 1;
+                                    rank.OnePoints += 1;
                                     rank.Score += 1;
                                 }
                             }
