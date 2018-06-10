@@ -113,7 +113,7 @@ namespace WorldCup2018.Controllers
         public ActionResult Ranking()
         {
             string userName = User.Identity.Name;
-            List<Teams> teams = _db.Matches.Where(r => r.MatchDateTime > DateTime.Now).Select(r => new Teams
+            List<Teams> teams = _db.Matches.Select(r => new Teams
             {
                 Team1 = r.Team1,
                 Team2 = r.Team2,
