@@ -34,35 +34,28 @@ namespace WorldCup2018.Controllers
                 foreach (var item in results)
                 {
                     string[] t = results[item.ToString()].ToString().Split(',');
-                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]) && Convert.ToDateTime(t[2]) < DateTime.Now)
+                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]))
                     {
-                        TempData["InsertedResult"] = "You are not allowed to update a match result after it has already been started!";
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]))
+                        UserInput ur = new UserInput();
+                        ur.UserName = userName;
+                        ur.MatchId = Int32.Parse(item.ToString());
+                        ur.Team1Score = Int32.Parse(t[0].ToString());
+                        ur.Team2Score = Int32.Parse(t[1].ToString());
+                        ur.DateTime = DateTime.Now;
+                        int matchId = Int32.Parse(item.ToString());
+                        var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
+                        if (insertedData == null)
                         {
-                            UserInput ur = new UserInput();
-                            ur.UserName = userName;
-                            ur.MatchId = Int32.Parse(item.ToString());
-                            ur.Team1Score = Int32.Parse(t[0].ToString());
-                            ur.Team2Score = Int32.Parse(t[1].ToString());
-                            ur.DateTime = DateTime.Now;
-                            int matchId = Int32.Parse(item.ToString());
-                            var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
-                            if (insertedData == null)
-                            {
-                                _db.UserInputs.Add(ur);
-                            }
-                            else
-                            {
-                                insertedData.Team1Score = Int32.Parse(t[0].ToString());
-                                insertedData.Team2Score = Int32.Parse(t[1].ToString());
-                                insertedData.DateTime = DateTime.Now;
-                            }
-                            _db.SaveChanges();
-                            TempData["InsertedResult"] = "Your data is updated!";
+                            _db.UserInputs.Add(ur);
                         }
+                        else
+                        {
+                            insertedData.Team1Score = Int32.Parse(t[0].ToString());
+                            insertedData.Team2Score = Int32.Parse(t[1].ToString());
+                            insertedData.DateTime = DateTime.Now;
+                        }
+                        _db.SaveChanges();
+                        TempData["InsertedResult"] = "Your data is updated!";
                     }
                 }
                 GetData data = GetTeamData();
