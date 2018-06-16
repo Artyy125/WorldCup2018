@@ -12,6 +12,7 @@ namespace WorldCup2018.Models
         public int FivePoints { get; set; }
         public int ThreePoints { get; set; }
         public int OnePoints { get; set; }
+        public int NoPoint { get; set; }
         public int Win { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

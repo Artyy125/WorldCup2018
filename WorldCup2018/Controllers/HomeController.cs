@@ -157,7 +157,7 @@ namespace WorldCup2018.Controllers
                             }
                             else
                             {
-
+                                rank.NoPoint += 1;
                             }
 
                         }
