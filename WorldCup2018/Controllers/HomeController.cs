@@ -31,10 +31,12 @@ namespace WorldCup2018.Controllers
             {
                 TempData["InsertedResult"] = "";
                 string userName = User.Identity.Name;
+                GetData dataCheck = GetTeamData();
                 foreach (var item in results)
                 {
+                    DateTime matchDate = dataCheck.Teams.Where(r => r.Id == Convert.ToInt32(item)).Select(r => r.MatchDate).FirstOrDefault();
                     string[] t = results[item.ToString()].ToString().Split(',');
-                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]))
+                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]) && matchDate.ToUniversalTime() >= DateTime.UtcNow)
                     {
                         UserInput ur = new UserInput();
                         ur.UserName = userName;
