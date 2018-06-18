@@ -98,6 +98,11 @@ namespace WorldCup2018.Controllers
                             sc.Team1Score = oc.Team1Score;
                             sc.Team2Score = oc.Team2Score;
                         }
+                        else
+                        {
+                            sc.Team1Score = null;
+                            sc.Team2Score = null;
+                        }
                     });
                 }
             }
