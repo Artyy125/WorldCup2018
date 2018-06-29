@@ -36,6 +36,9 @@
                                 <td>
                                     <input disabled="@(item.MatchDate.ToUniversalTime() < DateTime.UtcNow)" type="number" id="@item.Team1" name="@item.Id" max="20" min="0" size="4" onkeyup="if(this.value>20){this.value='20';}else if(this.value<0){this.value='0';}" value="@item.Team1Score" />
                                 </td>
+                                <td>
+                                    <input type="radio" disabled="@(item.MatchDate.ToUniversalTime() < DateTime.UtcNow)" name="@item.Id" value="@item.Team1" checked="@(item.Team1 == item.Winner)" />
+                                </td>
                             </tr>
                         </table>
 
@@ -53,6 +56,9 @@
                                     <input disabled="@(item.MatchDate.ToUniversalTime() < DateTime.UtcNow)" type="number" id="@item.Team2" name="@item.Id" max="20" min="0" onKeyUp="if(this.value>20){this.value='20';}else if(this.value<0){this.value='0';}" size="4" value="@item.Team2Score" />
                                     @*<input type="hidden" id="Date@(item.Id)" name="@item.Id" size="4" value="@item.MatchDate" />*@
                                 </td>
+                                <td>
+                                    <input type="radio" disabled="@(item.MatchDate.ToUniversalTime() < DateTime.UtcNow)" name="@item.Id" value="@item.Team2" checked="@(item.Team2 == item.Winner)"/>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -62,11 +68,30 @@
         <button type="submit" class="btn btn-primary" style="text-align:center">Submit</button>
     </form>
 </div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
 <script>
     setInterval(function () {
         location.reload();
     }, 300000);
 
+
+    $("input[type=number]").keyup(function (e) {
+        var result = [];
+        var currentValue = $(this).val();
+        var r = $('input').filter(function () {
+            thisID = $.trim(this.id);
+            thisName = $.trim(this.name);
+            thisValue = (this.value);
+            return e.currentTarget.id != thisID && thisName == e.currentTarget.name && e.currentTarget.value == thisValue;
+        });
+        if (r.length > 0) {
+            $("input:radio[name=" + this.name + "]").attr("disabled", false);
+        }
+        else {
+            $("input:radio[name=" + this.name + "]").attr("disabled", true);
+            $("input:radio[name=" + this.name + "]").prop('checked', false);
+        }
+    });
 </script>
 
 

@@ -34,16 +34,60 @@ namespace WorldCup2018.Controllers
                 GetData dataCheck = GetTeamData();
                 foreach (var item in results)
                 {
+                    int score1;
+                    int score2;
+                    string winner ="";
                     DateTime matchDate = dataCheck.Teams.Where(r => r.Id == Convert.ToInt32(item)).Select(r => r.MatchDate).FirstOrDefault();
                     string[] t = results[item.ToString()].ToString().Split(',');
-                    if (!string.IsNullOrEmpty(t[0]) && !string.IsNullOrEmpty(t[1]) && matchDate.ToUniversalTime() >= DateTime.UtcNow)
+                    if (t.Length == 3)
+                    {
+                        score1 = !string.IsNullOrEmpty(t[0]) ? Int32.Parse(t[0].ToString()) : -1;
+                        if (!string.IsNullOrEmpty(t[1]))
+                        {
+                            score2 = t[1].Length > 2 ? Int32.Parse(t[2].ToString()) : Int32.Parse(t[1].ToString());
+                        }
+                        else
+                        {
+                            score2 = -1;
+                        }
+                        if (!string.IsNullOrEmpty(t[2]))
+                        {
+                            winner = t[1].Length > 2 ? t[1].ToString() : t[2].ToString();
+                        }
+                        else
+                        {
+                            winner = "";
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(t[0]))
+                        {
+                            score1 = Int32.Parse(t[0].ToString());
+                        }
+                        else
+                        {
+                            score1 = -1;
+                        }
+                        if (!string.IsNullOrEmpty(t[1]))
+                        {
+                            score2 = Int32.Parse(t[1].ToString());
+                        }
+                        else
+                        {
+                            score2 = -1;
+                        }
+                    }
+                    if (score1 != -1 && score2 != -1 && matchDate.ToUniversalTime() >= DateTime.UtcNow)
                     {
                         UserInput ur = new UserInput();
                         ur.UserName = userName;
                         ur.MatchId = Int32.Parse(item.ToString());
-                        ur.Team1Score = Int32.Parse(t[0].ToString());
-                        ur.Team2Score = Int32.Parse(t[1].ToString());
+                        ur.Team1Score = score1;
+                        ur.Team2Score = score2;
                         ur.DateTime = DateTime.Now;
+                        ur.Winner = winner;
                         int matchId = Int32.Parse(item.ToString());
                         var insertedData = _db.UserInputs.Where(r => r.UserName == userName && r.MatchId == matchId).FirstOrDefault();
                         if (insertedData == null)
@@ -52,8 +96,9 @@ namespace WorldCup2018.Controllers
                         }
                         else
                         {
-                            insertedData.Team1Score = Int32.Parse(t[0].ToString());
-                            insertedData.Team2Score = Int32.Parse(t[1].ToString());
+                            insertedData.Team1Score = score1;
+                            insertedData.Team2Score = score2;
+                            insertedData.Winner = winner;
                             insertedData.DateTime = DateTime.Now;
                         }
                         _db.SaveChanges();
@@ -72,17 +117,38 @@ namespace WorldCup2018.Controllers
         private GetData GetTeamData(bool isResult=false)
         {
             string userName = User.Identity.Name;
-            List<Teams> teams = _db.Matches.Select(r => new Teams
+            DateTime pastGames = Convert.ToDateTime("06-28-2018");
+            List<Teams> teams = new List<Teams>();
+            if (isResult)
             {
-                Team1 = r.Team1,
-                Team2 = r.Team2,
-                Team1LogoUrl = r.Team1FlagUrl,
-                Team2LogoUrl = r.Team2FlagUrl,
-                Team1Score = r.Team1Score.Value,
-                Team2Score = r.Team2Score.Value,
-                MatchDate = r.MatchDateTime,
-                Id = r.Id
-            }).ToList();
+                 teams = _db.Matches.Select(r => new Teams
+                {
+                    Team1 = r.Team1,
+                    Team2 = r.Team2,
+                    Team1LogoUrl = r.Team1FlagUrl,
+                    Team2LogoUrl = r.Team2FlagUrl,
+                    Team1Score = r.Team1Score.Value,
+                    Team2Score = r.Team2Score.Value,
+                    MatchDate = r.MatchDateTime,
+                    Id = r.Id,
+                    Winner = r.Winner
+                }).ToList();
+            }
+            else
+            {
+                teams = _db.Matches.Where(r => r.MatchDateTime > pastGames).Select(r => new Teams
+                {
+                    Team1 = r.Team1,
+                    Team2 = r.Team2,
+                    Team1LogoUrl = r.Team1FlagUrl,
+                    Team2LogoUrl = r.Team2FlagUrl,
+                    Team1Score = r.Team1Score.Value,
+                    Team2Score = r.Team2Score.Value,
+                    MatchDate = r.MatchDateTime,
+                    Id = r.Id
+                }).ToList();
+            }
+
             GetData data = new GetData();
             data.Teams = teams;
             if (isResult== false)
@@ -97,6 +163,11 @@ namespace WorldCup2018.Controllers
                         {
                             sc.Team1Score = oc.Team1Score;
                             sc.Team2Score = oc.Team2Score;
+                            if (DateTime.UtcNow < sc.MatchDate.ToUniversalTime())
+                            {
+                                sc.Winner = oc.Winner?.Trim() != "" ? oc.Winner : null;
+                            }
+                            
                         }
                         else
                         {
@@ -146,6 +217,11 @@ namespace WorldCup2018.Controllers
                             {
                                 rank.FivePoints += 1;
                                 rank.Score += 5;
+                                if (RealResult.Team1Score == RealResult.Team2Score && RealResult.Winner != null && RealResult.Winner.Trim() != "" && RealResult.Winner == result.Winner)
+                                {
+                                    rank.Win += 1;
+                                    rank.Score += 2;
+                                }
                             }
                             else if ((RealResult.Team1Score > RealResult.Team2Score && result.Team1Score > result.Team2Score) || (RealResult.Team1Score < RealResult.Team2Score && result.Team1Score < result.Team2Score))
                             {
@@ -164,7 +240,6 @@ namespace WorldCup2018.Controllers
                             {
                                 rank.NoPoint += 1;
                             }
-
                         }
                     }
                 }
