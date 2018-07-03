@@ -212,6 +212,11 @@ namespace WorldCup2018.Controllers
                             {
                                 rank.SevenPoints += 1;
                                 rank.Score += 7;
+                                if (RealResult.Team1Score == RealResult.Team2Score && RealResult.Winner != null && RealResult.Winner.Trim() != "" && RealResult.Winner == result.Winner)
+                                {
+                                    rank.Win += 1;
+                                    rank.Score += 2;
+                                }
                             }
                             else if (RealResult.Team1Score - RealResult.Team2Score == result.Team1Score - result.Team2Score)
                             {
