@@ -108,7 +108,7 @@ namespace WorldCup2018.Controllers
                 GetData data = GetTeamData();
                 return View(data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
