@@ -150,6 +150,10 @@ namespace WorldCup2018.Controllers
             }
 
             GetData data = new GetData();
+            foreach (var item in teams)
+            {
+                item.Winner = _db.UserInputs.Where(r => r.UserName == userName && item.Id == r.MatchId).Select(r => r.Winner).FirstOrDefault();
+            }
             data.Teams = teams;
             if (isResult== false)
             {
